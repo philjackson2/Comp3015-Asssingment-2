@@ -29,6 +29,8 @@ SceneBasic_Uniform::SceneBasic_Uniform() : plane(10.0f, 10.0f, 1000, 1000), angl
         true);
     wall = ObjMesh::load("media/wall.obj",
         true);
+    ogre = ObjMesh::load("media/bs_ears.obj",
+        true);
     
     
 }
@@ -79,15 +81,21 @@ void SceneBasic_Uniform::initScene()
     ///  the below code loads both textures into the scene and combines them into one so they are textured differently
     /// </summary>
     GLuint texID =
-        Texture::loadTexture("media/texture/brick1.jpg");
-    GLuint texID2 =
-        Texture::loadTexture("media/texture/moss.png");
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texID);
-
-
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, texID2); 
+            Texture::loadTexture("media/texture/brick1.jpg");
+        GLuint texID3 = 
+            Texture::loadTexture("media/texture/cement.jpg");
+        GLuint texID2 =
+            Texture::loadTexture("media/texture/moss.png");
+        GLuint texID4=
+            Texture::loadTexture("media/texture/ogre_diffuse.png");
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texID);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texID2);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, texID3);
+        glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_2D, texID4);
 
     
 }
@@ -134,45 +142,51 @@ void SceneBasic_Uniform::update( float t )
     }
 
     if (GetKeyState('P') & 0x8000) { //change textures on a button press
-        GLuint texID =
+      /*  GLuint texID =
             Texture::loadTexture("media/texture/spencer.jpg");
         GLuint texID2 =
             Texture::loadTexture("media/texture/moss.png");
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texID);
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texID2);
+        glBindTexture(GL_TEXTURE_2D, texID2);*/
     }
 
     if (GetKeyState('L') & 0x8000) { //change textures on a button press
-        GLuint texID =
+       /* GLuint texID =
             Texture::loadTexture("media/texture/cement.jpg");
         GLuint texID2 =
             Texture::loadTexture("media/texture/bluewater.png");
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texID);
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texID2);
+        glBindTexture(GL_TEXTURE_2D, texID2);*/
 
     }
 
     if (GetKeyState('M') & 0x8000) { //change textures on a button press
-        GLuint texID =
+      /*  GLuint texID =
             Texture::loadTexture("media/texture/brick1.jpg");
+        GLuint texID3 = 
+            Texture::loadTexture("media/texture/cement.jpg");
         GLuint texID2 =
             Texture::loadTexture("media/texture/moss.png");
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texID);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texID2);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, texID3);*/
     }
-}
+} 
 
 void SceneBasic_Uniform::render()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    
+    prog.setUniform("Tex1", 0); //feeding Tex 1 to set to 0 for it to grab the correct texture
+
+
     prog.setUniform("light.position", vec3(0.0, 1.0, 0.0));
     prog.setUniform("Material.Kd", 0.4f, 0.4f, 0.4f);
     prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
@@ -200,7 +214,15 @@ void SceneBasic_Uniform::render()
     model = mat4(1.0f);
     model = glm::translate(model, vec3(0.0f, -0.45f, 0.0f));
     setMatrices();
+    prog.setUniform("Tex1", 2);
     plane.render();
+
+    model = mat4(1.0f);
+    model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
+    model = glm::translate(model, vec3(1.0f, 2, 0)); 
+    setMatrices();
+    prog.setUniform("Tex1", 3);
+    ogre->render();
 
     float x = 2.0f; //declaring values for camera start poistion 
     float y = 1.0f;

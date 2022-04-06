@@ -9,7 +9,7 @@ in vec3 Normal;
 layout (location = 0) out vec4 FragColor;
 layout(binding=0) uniform sampler2D Tex1;
 
-//multi textruing 
+//multi tex
 layout(binding=0) uniform sampler2D BrickTex;
 layout(binding=1) uniform sampler2D MossTex;
 

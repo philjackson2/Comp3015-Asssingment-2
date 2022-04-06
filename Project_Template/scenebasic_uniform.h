@@ -15,6 +15,8 @@ class SceneBasic_Uniform : public Scene
 {
 private:
     GLSLProgram prog;
+  
+
 
 
     float angle, tPrev, rotSpeed;
@@ -24,6 +26,7 @@ private:
     std::unique_ptr<ObjMesh> pig; //pig mesh
     std::unique_ptr<ObjMesh> cube; //for the cube
     std::unique_ptr<ObjMesh> wall;//wall
+    std::unique_ptr<ObjMesh> ogre;
     void setMatrices();
 
     void compile();
