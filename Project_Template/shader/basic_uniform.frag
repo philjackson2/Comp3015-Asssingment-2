@@ -8,6 +8,12 @@ in vec3 Normal;
 //out variable, this typical for all fragment shaders
 layout (location = 0) out vec4 FragColor;
 layout(binding=0) uniform sampler2D Tex1;
+
+//multi textruing 
+layout(binding=0) uniform sampler2D BrickTex;
+layout(binding=1) uniform sampler2D MossTex;
+
+
 uniform struct lightInfo
 {
 vec4 position;
@@ -27,15 +33,20 @@ float shininess;
 
 vec3 blinnPhong (vec3 position, vec3 normal)
 {
-vec3 texColor = texture(Tex1, TexCoord).rgb;
-vec3 ambient = texColor * light.la;
+vec4 texColor = texture(Tex1, TexCoord); //extract texture
+vec4 texColor2 = texture(MossTex, TexCoord); //extract textures to mix them together
+
+vec3 texMix = mix(texColor.rgb, texColor2.rgb, texColor2.a); //mixes the fields together in order to create a mixed texture
+
+
+vec3 ambient = texMix * light.la;
 
 vec3 s = vec3 (0.0);
 s = normalize (vec3 (light.position) - position); //calculating diffuse 
 
 float sdotn = max (dot(s, normal), 0.0);
 
-vec3 diffuse = texColor * sdotn;
+vec3 diffuse = texMix * sdotn;
 
 vec3 spec = vec3 (0.0);
 

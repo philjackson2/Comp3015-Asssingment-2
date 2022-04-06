@@ -74,12 +74,22 @@ void SceneBasic_Uniform::initScene()
     prog.setUniform("light.l", vec3(0.9, 0.9, 0.9));
     prog.setUniform("light.la", vec3(0.6, 0.4, 0.3));
 
+
+    /// <summary>
+    ///  the below code loads both textures into the scene and combines them into one so they are textured differently
+    /// </summary>
     GLuint texID =
         Texture::loadTexture("media/texture/brick1.jpg");
+    GLuint texID2 =
+        Texture::loadTexture("media/texture/moss.png");
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texID);
 
-   
+
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texID2); 
+
+    
 }
 
 void SceneBasic_Uniform::compile()
@@ -126,22 +136,35 @@ void SceneBasic_Uniform::update( float t )
     if (GetKeyState('P') & 0x8000) { //change textures on a button press
         GLuint texID =
             Texture::loadTexture("media/texture/spencer.jpg");
+        GLuint texID2 =
+            Texture::loadTexture("media/texture/moss.png");
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texID);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texID2);
     }
 
     if (GetKeyState('L') & 0x8000) { //change textures on a button press
         GLuint texID =
             Texture::loadTexture("media/texture/cement.jpg");
+        GLuint texID2 =
+            Texture::loadTexture("media/texture/bluewater.png");
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texID);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texID2);
+
     }
 
     if (GetKeyState('M') & 0x8000) { //change textures on a button press
         GLuint texID =
             Texture::loadTexture("media/texture/brick1.jpg");
+        GLuint texID2 =
+            Texture::loadTexture("media/texture/moss.png");
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texID);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texID2);
     }
 }
 
