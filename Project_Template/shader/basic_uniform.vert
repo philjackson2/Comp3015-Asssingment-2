@@ -12,6 +12,7 @@ out vec3 Colour;
 out vec2 TexCoord;
 out vec3 Position;
 out vec3 Normal;
+out vec3 fragPosition;
 
  
  //light information struct
@@ -36,6 +37,7 @@ uniform struct MaterialInfo
 uniform mat4 ModelViewMatrix;   //model view matrix
 uniform mat3 NormalMatrix;		//normal matrix
 uniform mat4 MVP;				//model view projection matrix
+
 
  
 
@@ -69,6 +71,7 @@ void main()
 { 
   //transfrom normal from model coordinates to view coordinates
   TexCoord = VetrexTexCoord;
+  vec4(VertexPosition,1.0);
 
   
    Normal = normalize( NormalMatrix * VertexNormal);

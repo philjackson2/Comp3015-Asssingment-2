@@ -5,7 +5,7 @@
 
 #include <glad/glad.h>
 #include "helper/glslprogram.h"
-
+#include "helper/skybox.h"
 
 #include <glm/glm.hpp>
 #include "helper/plane.h"
@@ -16,6 +16,7 @@ class SceneBasic_Uniform : public Scene
 private:
     GLSLProgram prog;
   
+    SkyBox sky;
 
 
 

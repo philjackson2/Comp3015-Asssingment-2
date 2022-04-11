@@ -46,6 +46,24 @@ void SceneBasic_Uniform::initScene()
 	glEnable(GL_DEPTH_TEST);
 
 
+
+
+    glEnable(GL_DEPTH_TEST);
+
+    projection = mat4(1.0f);
+    angle = glm::radians(90.0f); //set the initial angle
+    //extract the cube texture
+    GLuint cubeTex =
+        Texture::loadHdrCubeMap("media/texture/cube/pisahdr/pisa");
+    //activate and bindtexture
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, cubeTex);
+
+
+
+
+
+
     view = glm::lookAt(vec3(0.5f, 0.75f, 0.75f), vec3(0.0f, 0.0f, 0.0f),
         vec3(0.0f, 1.0f, 0.0f));
     projection = mat4(1.0f);
@@ -230,6 +248,12 @@ void SceneBasic_Uniform::render()
     vec3 cameraPos = vec3(10.0f * cos(angle),x, y * sin(angle));
     view = glm::lookAt(cameraPos, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f,
         0.0f));
+
+
+    prog.use();
+    model = mat4(1.0f);
+    setMatrices();
+    sky.render();
 
 }
 
