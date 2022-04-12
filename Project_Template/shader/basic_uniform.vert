@@ -13,7 +13,8 @@ out vec2 TexCoord;
 out vec3 Position;
 out vec3 Normal;
 out vec3 fragPosition;
-
+out vec4 projectionTexCoord;
+out vec3 vec;
  
  //light information struct
 uniform struct LightInfo 
@@ -37,8 +38,8 @@ uniform struct MaterialInfo
 uniform mat4 ModelViewMatrix;   //model view matrix
 uniform mat3 NormalMatrix;		//normal matrix
 uniform mat4 MVP;				//model view projection matrix
-
-
+uniform mat4 ModelMatrix;
+uniform mat4 ProjectionMatrix;
  
 
  vec3 phongModel( int light, vec3 position, vec3 n ) {
@@ -71,8 +72,9 @@ void main()
 { 
   //transfrom normal from model coordinates to view coordinates
   TexCoord = VetrexTexCoord;
-  vec4(VertexPosition,1.0);
-
+  vec4 pos4 = vec4(VertexPosition,1.0);
+  
+  vec = VertexPosition;
   
    Normal = normalize( NormalMatrix * VertexNormal);
    Position = (ModelViewMatrix * vec4(VertexPosition, 1.0)).xyz;
@@ -83,6 +85,8 @@ for( int i = 0; i < 3; i++ )
 Colour += phongModel( i, Position, Normal );
 }
 
+
+projectionTexCoord = ProjectionMatrix * (ModelMatrix * pos4);
 
   gl_Position = MVP * vec4(VertexPosition,1.0) ; //*RotationMatrix for roating
 } 
