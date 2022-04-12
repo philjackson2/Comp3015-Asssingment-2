@@ -43,24 +43,9 @@ SceneBasic_Uniform::SceneBasic_Uniform() : plane(10.0f, 10.0f, 1000, 1000), angl
 void SceneBasic_Uniform::initScene()
 {
     compile();
-	glEnable(GL_DEPTH_TEST);
-
-
-
+	
 
     glEnable(GL_DEPTH_TEST);
-
-    projection = mat4(1.0f);
-    angle = glm::radians(90.0f); //set the initial angle
-    //extract the cube texture
-    GLuint cubeTex =
-        Texture::loadHdrCubeMap("media/texture/cube/pisahdr/pisa");
-    //activate and bindtexture
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, cubeTex);
-
-
-
 
 
 
@@ -114,6 +99,25 @@ void SceneBasic_Uniform::initScene()
         glBindTexture(GL_TEXTURE_2D, texID3);
         glActiveTexture(GL_TEXTURE3);
         glBindTexture(GL_TEXTURE_2D, texID4);
+
+
+
+    
+
+
+
+
+     
+
+        projection = mat4(1.0f);
+        angle = glm::radians(90.0f); //set the initial angle
+        //extract the cube texture
+        GLuint cubeTex =
+            Texture::loadHdrCubeMap("media/texture/cube/pisa-hdr/pisa");
+        //activate and bindtexture
+        glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, cubeTex);
+
 
     
 }

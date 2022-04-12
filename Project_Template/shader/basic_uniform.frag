@@ -18,7 +18,7 @@ layout(binding=1) uniform sampler2D MossTex;
 
 
 //skybox
-layout(binding=0) uniform samplerCube SkyBoxTex;
+layout(binding=3) uniform samplerCube SkyBoxTex;
 
 
 //in vec3 Vec;
