@@ -49,6 +49,11 @@ void SceneBasic_Uniform::initScene()
 
 
 
+
+
+
+
+
     view = glm::lookAt(vec3(0.5f, 0.75f, 0.75f), vec3(0.0f, 0.0f, 0.0f),
         vec3(0.0f, 1.0f, 0.0f));
     projection = mat4(1.0f);
@@ -106,18 +111,19 @@ void SceneBasic_Uniform::initScene()
 
 
 
-
-     
-
         projection = mat4(1.0f);
         angle = glm::radians(90.0f); //set the initial angle
         //extract the cube texture
         GLuint cubeTex =
             Texture::loadHdrCubeMap("media/texture/cube/pisa-hdr/pisa");
         //activate and bindtexture
-        glActiveTexture(GL_TEXTURE3);
+        glActiveTexture(GL_TEXTURE4);
         glBindTexture(GL_TEXTURE_CUBE_MAP, cubeTex);
 
+
+     
+
+       
 
     
 }
@@ -206,6 +212,12 @@ void SceneBasic_Uniform::render()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
+
+ 
+
+
+
     prog.setUniform("Tex1", 0); //feeding Tex 1 to set to 0 for it to grab the correct texture
 
 
@@ -216,11 +228,15 @@ void SceneBasic_Uniform::render()
     prog.setUniform("Material.Shininess", 180.0f);
     model = mat4(1.0f);
     model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
+
+
     setMatrices();
     pig->render();
     model = mat4(1.0f);
     model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
     model = glm::translate(model, vec3(3.0f, 0, 0)); //moving the cube out of the way for the pig to not be inside it 
+
+
     setMatrices();
     cube->render();//cube is differently name in the .h file so they are not overwiring eachother
     model = mat4(1.0f);
@@ -253,9 +269,10 @@ void SceneBasic_Uniform::render()
     view = glm::lookAt(cameraPos, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f,
         0.0f));
 
-
     prog.use();
+    model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
     model = mat4(1.0f);
+    prog.setUniform("Tex1", 4);
     setMatrices();
     sky.render();
 
