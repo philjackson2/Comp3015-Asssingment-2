@@ -206,6 +206,20 @@ void SceneBasic_Uniform::update( float t )
         glActiveTexture(GL_TEXTURE2);
         glBindTexture(GL_TEXTURE_2D, texID3);*/
     }
+
+
+    if (GetKeyState('E') & 0x8000)  {
+        try {
+            prog.compileShader("shader/edge_detection.vert");
+            prog.compileShader("shader/edge_detection.frag");//here the two shaders are loadead in with the compile 
+            prog.link();
+            prog.use();
+        }
+        catch (GLSLProgramException& e) {
+            cerr << e.what() << endl;
+            exit(EXIT_FAILURE);
+        }
+    }
 } 
 
 void SceneBasic_Uniform::render()

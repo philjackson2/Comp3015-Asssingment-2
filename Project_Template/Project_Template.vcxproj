@@ -163,6 +163,8 @@
     <None Include="packages.config" />
     <None Include="shader\basic_uniform.frag" />
     <None Include="shader\basic_uniform.vert" />
+    <None Include="shader\edge_detection.frag" />
+    <None Include="shader\edge_detection.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="helper\aabb.h" />

@@ -75,7 +75,8 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="packages.config" />
-    <None Include="media\wall.mtl" />
+    <None Include="shader\edge_detection.vert" />
+    <None Include="shader\edge_detection.frag" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="helper\scene.h">
@@ -126,57 +127,5 @@
     <ClInclude Include="helper\skybox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="media\wall.obj" />
-    <Object Include="media\pig_triangulated.obj" />
-    <Object Include="media\cube.obj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="media\texture\ao_ears.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="media\texture\bluewater.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="media\texture\brick1.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="media\texture\cement.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="media\texture\fire.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="media\texture\flower.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="media\texture\hardwood2_diffuse.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="media\texture\hardwood2_roughness.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="media\texture\me_textile.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="media\texture\moss.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="media\texture\ogre_diffuse.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="media\texture\ogre_normalmap.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="media\texture\smoke.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="media\texture\spencer.JPG">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="media\texture\star.png">
-      <Filter>Resource Files</Filter>
-    </Image>
   </ItemGroup>
 </Project>
