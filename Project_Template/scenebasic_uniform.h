@@ -18,7 +18,7 @@ private:
   
     SkyBox sky;
 
-
+    GLuint fsQuad, fboHandle, renderTex;
 
     float angle, tPrev, rotSpeed;
    
@@ -31,6 +31,16 @@ private:
     void setMatrices();
 
     void compile();
+
+
+    void setupFBO();
+
+    void pass1();
+    void pass2();
+
+    void renderEdgeDetect();
+
+    void edgeDetectShaders();
 
 public:
     SceneBasic_Uniform();

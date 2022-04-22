@@ -1,24 +1,20 @@
 #version 460
 
 //in variable that receives the diffuse calculation from the vertex shader
-in vec3 Colour;
-in vec2 TexCoord;
+
 in vec3 Position;
 in vec3 Normal;
-in vec4 projectionTexCoord;
-in vec3 vec;
+
 
 //out variable, this typical for all fragment shaders
 layout (location = 0) out vec4 FragColor;
-layout(binding=0) uniform sampler2D Tex1;
+layout(binding=0) uniform sampler2D RenderTex;
 
-//multi tex
-layout(binding=0) uniform sampler2D BrickTex;
-layout(binding=1) uniform sampler2D MossTex;
+
 
 
 //skybox
-layout(binding=4) uniform samplerCube SkyBoxTex;
+//layout(binding=4) uniform samplerCube SkyBoxTex;
 
 
 //in vec3 Vec;
@@ -41,23 +37,25 @@ vec3 ks;
 float shininess;
 } material;
 
+uniform float edgeThreshold; //declaring uniform for the edge freshold
+uniform int pass; 
+const vec3 lum = vec3(0.2126, 0.7152, 0.0722);
 
 vec3 blinnPhong (vec3 position, vec3 normal)
 {
-vec4 texColor = texture(Tex1, TexCoord); //extract texture
-vec4 texColor2 = texture(MossTex, TexCoord); //extract textures to mix them together
-
-vec3 texMix = mix(texColor.rgb, texColor2.rgb, texColor2.a); //mixes the fields together in order to create a mixed texture
 
 
-vec3 ambient = texMix * light.la;
+
+
+
+vec3 ambient = material.ka * light.la; //replacing texmix with material.ka
 
 vec3 s = vec3 (0.0);
 s = normalize (vec3 (light.position) - position); //calculating diffuse 
 
 float sdotn = max (dot(s, normal), 0.0);
 
-vec3 diffuse = texMix * sdotn;
+vec3 diffuse = material.kd * sdotn; //replace texmix with material.kd
 
 vec3 spec = vec3 (0.0);
 
@@ -72,6 +70,42 @@ spec = material.ks * pow(max(dot(h, normal), 0.0), material.shininess);
 return ambient + light.l *(diffuse + spec);
 }
 
+float luminance( vec3 color )
+{
+ return dot(lum,color);
+}
+
+
+
+vec4 pass1()
+{
+ return vec4(blinnPhong( Position, normalize(Normal) ),1.0);
+}
+
+vec4 pass2()
+{
+ ivec2 pix = ivec2(gl_FragCoord.xy); //we grab a pixel to check if edge
+//pick neighboutring pixels for convolution filter
+//check lecture slides
+ float s00 = luminance(texelFetchOffset(RenderTex, pix, 0, ivec2(-1,1)).rgb);
+ float s10 = luminance(texelFetchOffset(RenderTex, pix, 0, ivec2(-1,0)).rgb);
+ float s20 = luminance(texelFetchOffset(RenderTex, pix, 0, ivec2(-1,-1)).rgb);
+ float s01 = luminance(texelFetchOffset(RenderTex, pix, 0, ivec2(0,1)).rgb);
+ float s21 = luminance(texelFetchOffset(RenderTex, pix, 0, ivec2(0,-1)).rgb);
+ float s02 = luminance(texelFetchOffset(RenderTex, pix, 0, ivec2(1,1)).rgb);
+ float s12 = luminance(texelFetchOffset(RenderTex, pix, 0, ivec2(1,0)).rgb);
+ float s22 = luminance(texelFetchOffset(RenderTex, pix, 0, ivec2(1,-1)).rgb);
+ float sx = s00 + 2 * s10 + s20 - (s02 + 2 * s12 + s22);
+ float sy = s00 + 2 * s01 + s02 - (s20 + 2 * s21 + s22);
+ float g = sx * sx + sy * sy;
+ if( g > edgeThreshold )
+ return vec4(1.0); //edge
+ else
+ return vec4(0.0,0.0,0.0,1.0); //no edge
+}
+
+
+
 void main()
 {
 vec3 FragmentColour;
@@ -80,7 +114,8 @@ vec3 FragmentColour;
     // vec3 and vec4 and how we solved the problem
     FragmentColour = blinnPhong(Position, normalize(Normal));
 
-    vec3 texColor = texture(SkyBoxTex, normalize(vec)).rgb; //how to assign to frag colour?
-   FragColor = vec4(FragmentColour + texColor *1.5, 1);
+  if( pass == 1 ) FragColor = pass1();
+ if( pass == 2 ) FragColor = pass2();
+
    
 }
