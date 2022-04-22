@@ -354,6 +354,23 @@ void SceneBasic_Uniform::update( float t )
             exit(EXIT_FAILURE);
         }
         edgeDetectShaders();
+        renderEdgeDetect();
+    }
+
+
+    if (GetKeyState('W') & 0x8000) {
+
+
+        try {
+            prog.compileShader("shader/basic_uniform.vert");
+            prog.compileShader("shader/basic_uniform.frag");//here the two shaders are loadead in with the compile 
+            prog.link();
+            prog.use();
+        }
+        catch (GLSLProgramException& e) {
+            cerr << e.what() << endl;
+            exit(EXIT_FAILURE);
+        }
     }
 } 
 
