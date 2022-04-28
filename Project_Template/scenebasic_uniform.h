@@ -14,41 +14,31 @@
 class SceneBasic_Uniform : public Scene
 {
 private:
-    GLSLProgram prog;
-  
-    SkyBox sky;
+	GLSLProgram prog;
 
-    GLuint fsQuad, fboHandle, renderTex;
-
-    float angle, tPrev, rotSpeed;
-   
-
-    Plane plane; 
-    std::unique_ptr<ObjMesh> pig; //pig mesh
-    std::unique_ptr<ObjMesh> cube; //for the cube
-    std::unique_ptr<ObjMesh> wall;//wall
-    std::unique_ptr<ObjMesh> ogre;
-    void setMatrices();
-
-    void compile();
+	SkyBox sky;
 
 
-    void setupFBO();
 
-    void pass1();
-    void pass2();
+	float angle, tPrev, rotSpeed;
 
-    void renderEdgeDetect();
 
-    void edgeDetectShaders();
+	Plane plane;
+	std::unique_ptr<ObjMesh> pig; //pig mesh
+	std::unique_ptr<ObjMesh> cube; //for the cube
+	std::unique_ptr<ObjMesh> wall;//wall
+	std::unique_ptr<ObjMesh> ogre;
+	void setMatrices();
+
+	void compile();
 
 public:
-    SceneBasic_Uniform();
+	SceneBasic_Uniform();
 
-    void initScene();
-    void update( float t );
-    void render();
-    void resize(int, int);
+	void initScene();
+	void update(float t);
+	void render();
+	void resize(int, int);
 };
 
 #endif // SCENEBASIC_UNIFORM_H

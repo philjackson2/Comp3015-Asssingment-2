@@ -1,4 +1,8 @@
-#version 460
+#version 430
+
+
+
+
 
 //in variable that receives the diffuse calculation from the vertex shader
 
