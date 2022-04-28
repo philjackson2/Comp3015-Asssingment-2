@@ -16,6 +16,16 @@ class SceneBasic_Uniform : public Scene
 private:
 	GLSLProgram prog;
 
+	GLuint Sprites;
+	int numSprites;
+	float* locations; 
+
+
+
+
+
+
+
 	SkyBox sky;
 
 

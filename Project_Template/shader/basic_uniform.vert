@@ -93,6 +93,6 @@ projectionTexCoord = ProjectionMatrix * (ModelMatrix * pos4);
   gl_Position = MVP * vec4(VertexPosition,1.0) ; //*RotationMatrix for roating
 
 
-  //gl_Position = ModelViewMatrix * vec4(VertexPosition,1.0);
+  gl_Position = ModelViewMatrix * vec4(VertexPosition,1.0);
 
 } 
