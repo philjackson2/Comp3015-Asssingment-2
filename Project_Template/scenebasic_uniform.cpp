@@ -16,6 +16,8 @@ using glm::mat4;
 
 
 
+
+
 glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f); //defining controls for camera
@@ -86,8 +88,8 @@ void SceneBasic_Uniform::initScene()
 
 		Texture::loadTexture(texName);
 
-	prog.setUniform("SpriteTex", 0)
-		prog.SetUniform("Size2", 0.15f);
+	prog.setUniform("SpriteTex", 0);
+	prog.setUniform("Size2", 0.15f);
 
 
 
