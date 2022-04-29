@@ -1,17 +1,17 @@
-#version 430
+#version 460
 layout( points ) in; //define the type of primitives recived 
 layout ( triangle_strip, max_vertices = 4 ) out; //the primitives produced 
 
-uniform float size2; 
+uniform float Size2; 
 
 uniform mat4 ProjectionMatrix; 
 
-out vec 2 TexCoord; 
+out vec2 TexCoord; 
 
 
 void main()
 {
-mat 4 m = ProjectionMatrix; 
+mat4 m = ProjectionMatrix; 
 
 
 //vertex 1
@@ -22,14 +22,14 @@ EmitVertex();
 
 
 //vertex 2
-gl_Position = m * (vec4(Size-Size2, 0.0,0.0) + gl_in[0].gl_Position); 
+gl_Position = m * (vec4(Size2, -Size2, 0.0,0.0) + gl_in[0].gl_Position); 
 TexCoord = vec2(1.0,0.0);
 
 EmitVertex(); 
 
 //vertex 3
 
-gl_position = m * (vec4(-Size2,Size2,0.0,0.0) + gl_in[0].gl_Position);
+gl_Position = m * (vec4(-Size2,Size2,0.0,0.0) + gl_in[0].gl_Position);
 TexCoord = vec2(0.0,1.0);
 EmitVertex();
 

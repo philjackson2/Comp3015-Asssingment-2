@@ -10,6 +10,7 @@ in vec3 vec;
 
 //out variable, this typical for all fragment shaders
 layout (location = 0) out vec4 FragColor;
+layout (location = 1) out vec4 FragColor1;
 layout(binding=0) uniform sampler2D Tex1;
 
 
@@ -86,9 +87,9 @@ vec3 FragmentColour;
     FragmentColour = blinnPhong(Position, normalize(Normal));
 
     vec3 texColor = texture(SkyBoxTex, normalize(vec)).rgb; //how to assign to frag colour?
- //  FragColor = vec4(FragmentColour + texColor *1.5, 1);
+ FragColor = vec4(FragmentColour + texColor *1.5, 1);
 
-   FragColor = texture(SpriteTex, TexCoord); //look up tex and assing colour
+   FragColor =+ texture(SpriteTex, TexCoord); //look up tex and assing colour
 
 
 

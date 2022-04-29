@@ -51,7 +51,7 @@ void SceneBasic_Uniform::initScene()
 	glEnable(GL_DEPTH_TEST);
 
 	numSprites = 50;
-	locations - new float[numSprites * 3];
+	locations = new float[numSprites * 3];
 	srand((unsigned int)time(0));
 
 
@@ -78,13 +78,13 @@ void SceneBasic_Uniform::initScene()
 	glBindVertexArray(Sprites);
 
 	glBindBuffer(GL_ARRAY_BUFFER, handle); 
-	glVertexAtrribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, ((GLubyte*)NULL + (0)));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, ((GLubyte*)NULL + (0)));
 	glEnableVertexAttribArray(0); 
 
 	glBindVertexArray(0);
 
 	//load texture
-	const char* texName = //filepath
+	const char* texName = "media/texture/flower.png ";
 
 		Texture::loadTexture(texName);
 
@@ -185,6 +185,7 @@ void SceneBasic_Uniform::compile()
 	try {
 		prog.compileShader("shader/basic_uniform.vert");
 		prog.compileShader("shader/basic_uniform.frag");//here the two shaders are loadead in with the compile 
+		prog.compileShader("shader/basic_uniform.geom");
 		prog.link();
 		prog.use();
 	}
@@ -271,9 +272,17 @@ void SceneBasic_Uniform::render()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
+	//point sprite
+
+	model = mat4(1.0f);
+	setMatrices();
+	glBindVertexArray(Sprites);
+	glDrawArrays(GL_POINTS, 0, numSprites);
+
+	//glFinish();
 
 
-
+	
 
 
 	prog.setUniform("Tex1", 0); //feeding Tex 1 to set to 0 for it to grab the correct texture
@@ -343,6 +352,8 @@ void SceneBasic_Uniform::setMatrices()
 	prog.setUniform("ModelViewMatrix", mv); //set the uniform for the model view matrix
 
 	prog.setUniform("NormalMatrix", glm::mat3(vec3(mv[0]), vec3(mv[1]), vec3(mv[2]))); //we set the uniform for normal matrix
+
+	prog.setUniform("ProjectionMatrix", projection);
 
 	prog.setUniform("MVP", projection * mv); //we set the model view matrix by multiplying the mv with the projection matrix
 }
