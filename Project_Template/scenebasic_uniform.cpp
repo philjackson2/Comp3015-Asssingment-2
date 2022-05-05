@@ -94,7 +94,7 @@ void SceneBasic_Uniform::initScene()
 
 
 
-
+	
 
 
 	//
@@ -128,14 +128,14 @@ void SceneBasic_Uniform::initScene()
 	projection = mat4(1.0f);
 
 
-	prog.setUniform("Lights[0].L", vec3(0.0f, 0.0f, 0.8f));
-	prog.setUniform("Lights[1].L", vec3(0.0f, 0.8f, 0.0f));
-	prog.setUniform("Lights[2].L", vec3(0.8f, 0.0f, 0.0f));
-	prog.setUniform("Lights[0].La", vec3(0.0f, 0.0f, 0.8f));
-	prog.setUniform("Lights[1].La", vec3(0.0f, 0.8f, 0.0f));
-	prog.setUniform("Lights[2].La", vec3(0.8f, 0.0f, 0.0f));
-	prog.setUniform("light.l", vec3(0.9, 0.9, 0.9));
-	prog.setUniform("light.la", vec3(0.6, 0.4, 0.3));
+	prog2.setUniform("Lights[0].L", vec3(0.0f, 0.0f, 0.8f));
+	prog2.setUniform("Lights[1].L", vec3(0.0f, 0.8f, 0.0f));
+	prog2.setUniform("Lights[2].L", vec3(0.8f, 0.0f, 0.0f));
+	prog2.setUniform("Lights[0].La", vec3(0.0f, 0.0f, 0.8f));
+	prog2.setUniform("Lights[1].La", vec3(0.0f, 0.8f, 0.0f));
+	prog2.setUniform("Lights[2].La", vec3(0.8f, 0.0f, 0.0f));
+	prog2.setUniform("light.l", vec3(0.9, 0.9, 0.9));
+	prog2.setUniform("light.la", vec3(0.6, 0.4, 0.3));
 
 
 	/// <summary>
@@ -184,16 +184,30 @@ void SceneBasic_Uniform::initScene()
 void SceneBasic_Uniform::compile()
 {
 	try {
+
+
 		prog.compileShader("shader/basic_uniform.vert");
 		prog.compileShader("shader/basic_uniform.frag");//here the two shaders are loadead in with the compile 
-		prog.compileShader("shader/basic_uniform.geom");
+		//prog.compileShader("shader/basic_uniform.geom");
 		prog.link();
 		prog.use();
+
+
+		prog2.compileShader("shader/basic_uniform_pointsprite.vert");
+		prog2.compileShader("shader/basic_uniform_pointsprite.frag");
+		prog2.compileShader("shader/basic_uniform_pointsprite.geom");
+		prog2.link();
+
+		
 	}
 	catch (GLSLProgramException& e) {
 		cerr << e.what() << endl;
 		exit(EXIT_FAILURE);
 	}
+
+
+
+	
 }
 
 void SceneBasic_Uniform::update(float t)
@@ -265,13 +279,19 @@ void SceneBasic_Uniform::update(float t)
 
 	if (GetKeyState('E') & 0x8000) {
 		
+		
+
 	}
+
+
+
+
 }
 
 void SceneBasic_Uniform::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	prog.use();
 
 	//point sprite
 
@@ -313,6 +333,8 @@ void SceneBasic_Uniform::render()
 	setMatrices();
 	wall->render();//wall is differently name in the .h file so they are not overwiring eachother
 
+	
+
 	prog.setUniform("Material.Kd", 0.1f, 0.1f, 0.1f);
 	prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
 	prog.setUniform("Material.Ka", 0.1f, 0.1f, 0.1f);
@@ -320,14 +342,14 @@ void SceneBasic_Uniform::render()
 	model = mat4(1.0f);
 	model = glm::translate(model, vec3(0.0f, -0.45f, 0.0f));
 	setMatrices();
-	prog.setUniform("Tex1", 2);
+	prog2.setUniform("Tex1", 2);
 	plane.render();
 
 	model = mat4(1.0f);
 	model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
 	model = glm::translate(model, vec3(1.0f, 2, 0));
 	setMatrices();
-	prog.setUniform("Tex1", 3);
+	prog2.setUniform("Tex1", 3);
 	ogre->render();
 
 	float x = 2.0f; //declaring values for camera start poistion 
@@ -337,24 +359,33 @@ void SceneBasic_Uniform::render()
 	view = glm::lookAt(cameraPos, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f,
 		0.0f));
 
-	prog.use();
+	
 	model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
 	model = mat4(1.0f);
-	prog.setUniform("Tex1", 4);
+	prog2.setUniform("Tex1", 4);
 	setMatrices();
 	sky.render();
+
+
+	
+
 
 }
 
 void SceneBasic_Uniform::setMatrices()
 {
+
+
+	
+
+
 	mat4 mv = view * model; //we create a model view matrix
 
-	prog.setUniform("ModelViewMatrix", mv); //set the uniform for the model view matrix
+	prog2.setUniform("ModelViewMatrix", mv); //set the uniform for the model view matrix
 
 	prog.setUniform("NormalMatrix", glm::mat3(vec3(mv[0]), vec3(mv[1]), vec3(mv[2]))); //we set the uniform for normal matrix
 
-	prog.setUniform("ProjectionMatrix", projection);
+	prog2.setUniform("ProjectionMatrix", projection);
 
 	prog.setUniform("MVP", projection * mv); //we set the model view matrix by multiplying the mv with the projection matrix
 }
