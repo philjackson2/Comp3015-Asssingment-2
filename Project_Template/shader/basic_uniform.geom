@@ -1,4 +1,4 @@
-#version 430
+#version 460
 layout( points ) in; //define the type of primitives recived 
 layout ( triangle_strip, max_vertices = 4 ) out; //the primitives produced 
 

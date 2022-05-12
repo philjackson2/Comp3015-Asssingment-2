@@ -142,7 +142,7 @@ void SceneBasic_Uniform::initScene()
 	///  the below code loads both textures into the scene and combines them into one so they are textured differently
 	/// </summary>
 	GLuint texID =
-		Texture::loadTexture("media/texture/smoke.png");
+		Texture::loadTexture("media/texture/brick.png");
 	GLuint texID3 =
 		Texture::loadTexture("media/texture/cement.jpg");
 	GLuint texID2 =
