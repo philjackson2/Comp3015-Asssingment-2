@@ -162,11 +162,12 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="shader\basic_uniform.frag" />
-    <None Include="shader\basic_uniform.geom" />
     <None Include="shader\basic_uniform.vert" />
     <None Include="shader\basic_uniform_pointsprite.frag" />
     <None Include="shader\basic_uniform_pointsprite.geom" />
     <None Include="shader\basic_uniform_pointsprite.vert" />
+    <None Include="shader\basic_uniform_skybox.frag" />
+    <None Include="shader\basic_uniform_skybox.vert" />
     <None Include="shader\edge_detection.frag" />
     <None Include="shader\edge_detection.vert" />
   </ItemGroup>

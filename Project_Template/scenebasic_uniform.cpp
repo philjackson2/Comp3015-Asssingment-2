@@ -89,8 +89,8 @@ void SceneBasic_Uniform::initScene()
 
 		Texture::loadTexture(texName);
 
-	prog.setUniform("SpriteTex", 0);
-	prog.setUniform("Size2", 0.15f);
+	prog2.setUniform("SpriteTex", 0);
+	prog2.setUniform("Size2", 0.15f);
 
 
 
@@ -198,7 +198,10 @@ void SceneBasic_Uniform::compile()
 		prog2.compileShader("shader/basic_uniform_pointsprite.geom");
 		prog2.link();
 
-		
+
+		prog3.compileShader("shader/basic_uniform_skybox.vert");
+		prog3.compileShader("shader/basic_uniform_skybox.frag");
+		prog3.link();
 	}
 	catch (GLSLProgramException& e) {
 		cerr << e.what() << endl;
@@ -290,8 +293,9 @@ void SceneBasic_Uniform::update(float t)
 
 void SceneBasic_Uniform::render()
 {
+	prog2.use();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	prog.use();
+	
 
 	//point sprite
 
@@ -300,11 +304,11 @@ void SceneBasic_Uniform::render()
 	glBindVertexArray(Sprites);
 	glDrawArrays(GL_POINTS, 0, numSprites);
 
-	//glFinish();
+	glFinish();
 
 
 
-
+	prog.use();
 
 	prog.setUniform("Tex1", 0); //feeding Tex 1 to set to 0 for it to grab the correct texture
 	prog.setUniform("light.position", vec3(0.0, 1.0, 0.0));
@@ -360,6 +364,8 @@ void SceneBasic_Uniform::render()
 		0.0f));
 
 
+
+	prog3.use();
 	model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
 	model = mat4(1.0f);
 	prog.setUniform("SkyBoxTex", 4);
@@ -375,20 +381,7 @@ void SceneBasic_Uniform::render()
 }
 
 
-void SceneBasic_Uniform::render2() {
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	prog2.use();
-
-	//point sprite
-
-	model = mat4(1.0f);
-	setMatrices();
-	glBindVertexArray(Sprites);
-	glDrawArrays(GL_POINTS, 0, numSprites);
-
-	glFinish();
-}
 
 void SceneBasic_Uniform::setMatrices()
 {
