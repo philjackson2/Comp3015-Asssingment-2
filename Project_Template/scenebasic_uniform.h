@@ -15,6 +15,7 @@ class SceneBasic_Uniform : public Scene
 {
 private:
 	GLSLProgram prog;
+	GLSLProgram prog2;
 
 	GLuint Sprites;
 	int numSprites;

@@ -80,6 +80,9 @@
     <None Include="shader\basic_uniform.geom">
       <Filter>shaders</Filter>
     </None>
+    <None Include="shader\basic_uniform_pointsprite.frag" />
+    <None Include="shader\basic_uniform_pointsprite.geom" />
+    <None Include="shader\basic_uniform_pointsprite.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="helper\scene.h">
