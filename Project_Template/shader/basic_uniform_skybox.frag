@@ -78,9 +78,10 @@ vec3 FragmentColour;
 
     //we pass LightInyensity to outr FragColor, notice the difference between vector types
     // vec3 and vec4 and how we solved the problem
-    FragmentColour = blinnPhong(Position, normalize(Normal));
+    //FragmentColour = blinnPhong(Position, normalize(Normal));
+	
 
-    vec3 texColor = texture(SkyBoxTex, normalize(vec)).rgb; //how to assign to frag colour?
-   FragColor = vec4(FragmentColour + texColor *1.5, 1);
+    vec3 SkyTex= texture(SkyBoxTex, normalize(vec)).rgb; 
+   FragColor = vec4(SkyTex *1.5, 1);
    
 }

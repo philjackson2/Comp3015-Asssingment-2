@@ -50,6 +50,7 @@ public:
 	void update(float t);
 	void render();
 	void resize(int, int);
+	void render2();
 };
 
 #endif // SCENEBASIC_UNIFORM_H
