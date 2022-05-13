@@ -84,8 +84,13 @@ void SceneBasic_Uniform::initScene()
 
     glBindVertexArray(0);
 
-    const char* texName = "media/texture/flower.png";
-    Texture::loadTexture(texName);
+
+	GLuint texID5 =
+		Texture::loadTexture("media/texture/flower.png");
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, texID5);
+   /* const char* texName = "media/texture/flower.png";
+    Texture::loadTexture(texName);*/
 
     prog2.setUniform("SpriteTex", 0);
     prog2.setUniform("Size2", 0.1f);
@@ -173,18 +178,18 @@ void SceneBasic_Uniform::compile()
 
 
 
-		prog2.compileShader("shader/basic_uniform_pointsprite.vert");
-		prog2.compileShader("shader/basic_uniform_pointsprite.frag");
-		prog2.compileShader("shader/basic_uniform_pointsprite.geom");
-		prog2.link();
-		prog2.use();
-
+		
 		prog.compileShader("shader/basic_uniform.vert");
 		prog.compileShader("shader/basic_uniform.frag");//here the two shaders are loadead in with the compile 
 		//prog.compileShader("shader/basic_uniform.geom");
 		prog.link();
 		prog.use();
 
+		prog2.compileShader("shader/basic_uniform_pointsprite.vert");
+		prog2.compileShader("shader/basic_uniform_pointsprite.frag");
+		prog2.compileShader("shader/basic_uniform_pointsprite.geom");
+		prog2.link();
+		prog2.use();
 
 
 
