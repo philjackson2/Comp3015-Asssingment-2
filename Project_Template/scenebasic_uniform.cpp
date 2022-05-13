@@ -89,18 +89,8 @@ void SceneBasic_Uniform::initScene()
 
 		Texture::loadTexture(texName);
 
-	prog2.setUniform("SpriteTex", 0);
-	prog2.setUniform("Size2", 0.15f);
-
-
-
-	
-
-
-	//
-
-
-
+	prog2.setUniform("SpriteTex", 100);
+	prog2.setUniform("Size2", 100.0f);
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -293,9 +283,8 @@ void SceneBasic_Uniform::update(float t)
 
 void SceneBasic_Uniform::render()
 {
-	prog2.use();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+	prog.use();
 
 	//point sprite
 
@@ -304,13 +293,15 @@ void SceneBasic_Uniform::render()
 	glBindVertexArray(Sprites);
 	glDrawArrays(GL_POINTS, 0, numSprites);
 
-	glFinish();
-
+	//glFinish();
 
 
 	prog.use();
 
+
 	prog.setUniform("Tex1", 0); //feeding Tex 1 to set to 0 for it to grab the correct texture
+
+
 	prog.setUniform("light.position", vec3(0.0, 1.0, 0.0));
 	prog.setUniform("Material.Kd", 0.4f, 0.4f, 0.4f);
 	prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
@@ -333,10 +324,10 @@ void SceneBasic_Uniform::render()
 	model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
 	model = glm::translate(model, vec3(-3.0f, 0, 0)); //moving the wall
 	setMatrices();
-
-
-
 	wall->render();//wall is differently name in the .h file so they are not overwiring eachother
+
+
+
 	prog.setUniform("Material.Kd", 0.1f, 0.1f, 0.1f);
 	prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
 	prog.setUniform("Material.Ka", 0.1f, 0.1f, 0.1f);
@@ -344,16 +335,14 @@ void SceneBasic_Uniform::render()
 	model = mat4(1.0f);
 	model = glm::translate(model, vec3(0.0f, -0.45f, 0.0f));
 	setMatrices();
-
-
-
-	prog.setUniform("Tex1", 2);
+	prog2.setUniform("Tex1", 2);
 	plane.render();
+
 	model = mat4(1.0f);
 	model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
 	model = glm::translate(model, vec3(1.0f, 2, 0));
 	setMatrices();
-	prog.setUniform("Tex1", 3);
+	prog2.setUniform("Tex1", 3);
 	ogre->render();
 
 	float x = 2.0f; //declaring values for camera start poistion 
@@ -363,15 +352,12 @@ void SceneBasic_Uniform::render()
 	view = glm::lookAt(cameraPos, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f,
 		0.0f));
 
-
-
 	prog3.use();
 	model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
 	model = mat4(1.0f);
 	prog.setUniform("SkyBoxTex", 4);
 	setMatrices();
 	sky.render();
-
 
 
 
