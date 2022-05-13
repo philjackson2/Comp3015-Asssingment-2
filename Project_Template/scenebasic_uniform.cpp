@@ -46,60 +46,56 @@ SceneBasic_Uniform::SceneBasic_Uniform() : plane(10.0f, 10.0f, 1000, 1000), angl
 void SceneBasic_Uniform::initScene()
 {
 	compile();
+	prog2.use();
 
-	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
-	glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
 
-	numSprites = 50;
-	locations = new float[numSprites * 3];
-	srand((unsigned int)time(0));
+    numSprites = 50;
+    locations = new float[numSprites * 3];
+    srand((unsigned int)time(0));
 
+    for (int i = 0; i < numSprites; i++)
+    {
+        vec3 p(((float)rand() / RAND_MAX * 2.0f) - 1.0f,
+            ((float)rand() / RAND_MAX * 2.0f) - 1.0f,
+            ((float)rand() / RAND_MAX * 2.0f) - 1.0f);
 
-	for (int i = 0; i < numSprites; i++) {
-		vec3 p(((float)rand() / RAND_MAX * 2.0f) - 1.0f,
-			((float)rand() / RAND_MAX * 2.0f) - 1.0f,
-			((float)rand() / RAND_MAX * 2.0f) - 1.0f);
-		locations[i * 3] = p.x;
-		locations[i * 3 + 1] = p.y;
-		locations[i * 3 + 2] = p.z;
+        locations[i * 3] = p.x;
+        locations[i * 3 + 1] = p.y;
+        locations[i * 3 + 2] = p.z;
+    }
 
+    GLuint handle;
+    glGenBuffers(1, &handle);
 
-	}
-	//set up buffers 
-	GLuint handle;
-	glGenBuffers(1, &handle);
+    glBindBuffer(GL_ARRAY_BUFFER, handle);
+    glBufferData(GL_ARRAY_BUFFER, numSprites * 3 * sizeof(float), locations, GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, handle);
-	glBufferData(GL_ARRAY_BUFFER, numSprites * 3 * sizeof(float), locations, GL_STATIC_DRAW);
+    delete[] locations;
 
-	delete[] locations;
+    glGenVertexArrays(1, &Sprites);
+    glBindVertexArray(Sprites);
 
-	glGenVertexArrays(1, &Sprites);
-	glBindVertexArray(Sprites);
+    glBindBuffer(GL_ARRAY_BUFFER, handle);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, ((GLubyte*)NULL + (0)));
+    glEnableVertexAttribArray(0);
 
-	glBindBuffer(GL_ARRAY_BUFFER, handle); 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, ((GLubyte*)NULL + (0)));
-	glEnableVertexAttribArray(0); 
+    glBindVertexArray(0);
 
-	glBindVertexArray(0);
+    const char* texName = "media/texture/flower.png";
+    Texture::loadTexture(texName);
 
-	//load texture
-	const char* texName = "media/texture/flower.png ";
-
-		Texture::loadTexture(texName);
-
-	prog2.setUniform("SpriteTex", 100);
-	prog2.setUniform("Size2", 100.0f);
-
-	glEnable(GL_DEPTH_TEST);
-
+    prog2.setUniform("SpriteTex", 0);
+    prog2.setUniform("Size2", 0.1f);
+	prog.use();
 
 
 
 	view = glm::lookAt(vec3(0.5f, 0.75f, 0.75f), vec3(0.0f, 0.0f, 0.0f),
 		vec3(0.0f, 1.0f, 0.0f));
-	projection = mat4(1.0f);
+	//projection = mat4(1.0f);
 	float x, z;
 	for (int i = 0; i < 3; i++)
 	{
@@ -115,7 +111,7 @@ void SceneBasic_Uniform::initScene()
 	glEnable(GL_DEPTH_TEST);
 	view = glm::lookAt(vec3(1.0f, 1.25f, 1.25f), vec3(0.0f, 0.0f, 0.0f),
 		vec3(0.0f, 1.0f, 0.0f));
-	projection = mat4(1.0f);
+	//projection = mat4(1.0f);
 
 
 	prog.setUniform("Lights[0].L", vec3(0.0f, 0.0f, 0.8f));
@@ -154,7 +150,7 @@ void SceneBasic_Uniform::initScene()
 
 
 
-	projection = mat4(1.0f);
+	//projection = mat4(1.0f);
 	angle = glm::radians(90.0f); //set the initial angle
 	//extract the cube texture
 	GLuint cubeTex =
@@ -176,6 +172,13 @@ void SceneBasic_Uniform::compile()
 	try {
 
 
+
+		prog2.compileShader("shader/basic_uniform_pointsprite.vert");
+		prog2.compileShader("shader/basic_uniform_pointsprite.frag");
+		prog2.compileShader("shader/basic_uniform_pointsprite.geom");
+		prog2.link();
+		prog2.use();
+
 		prog.compileShader("shader/basic_uniform.vert");
 		prog.compileShader("shader/basic_uniform.frag");//here the two shaders are loadead in with the compile 
 		//prog.compileShader("shader/basic_uniform.geom");
@@ -183,10 +186,6 @@ void SceneBasic_Uniform::compile()
 		prog.use();
 
 
-		prog2.compileShader("shader/basic_uniform_pointsprite.vert");
-		prog2.compileShader("shader/basic_uniform_pointsprite.frag");
-		prog2.compileShader("shader/basic_uniform_pointsprite.geom");
-		prog2.link();
 
 
 		prog3.compileShader("shader/basic_uniform_skybox.vert");
@@ -283,17 +282,32 @@ void SceneBasic_Uniform::update(float t)
 
 void SceneBasic_Uniform::render()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	prog.use();
 
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	prog2.use();
+
+	float x = 2.0f; //declaring values for camera start poistion 
+	float y = 1.0f;
+
+	/*vec3 cameraPos(1.0f, 0.0f, 1.0f);
+	view = glm::lookAt(cameraPos,
+		vec3(0.0f, 0.0f, 0.0f),
+		vec3(0.0f, 1.0f, 0.0f));*/
+
+
+	vec3 cameraPos = vec3(10.0f * cos(angle), x, y * sin(angle));
+	view = glm::lookAt(cameraPos, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f,
+		0.0f));
 	//point sprite
 
 	model = mat4(1.0f);
+	//model = glm::scale(model, vec3(10.0));
 	setMatrices();
+
 	glBindVertexArray(Sprites);
 	glDrawArrays(GL_POINTS, 0, numSprites);
 
-	//glFinish();
+	
 
 
 	prog.use();
@@ -335,22 +349,17 @@ void SceneBasic_Uniform::render()
 	model = mat4(1.0f);
 	model = glm::translate(model, vec3(0.0f, -0.45f, 0.0f));
 	setMatrices();
-	prog2.setUniform("Tex1", 2);
+	prog.setUniform("Tex1", 2);
 	plane.render();
 
 	model = mat4(1.0f);
 	model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
 	model = glm::translate(model, vec3(1.0f, 2, 0));
 	setMatrices();
-	prog2.setUniform("Tex1", 3);
+	prog.setUniform("Tex1", 3);
 	ogre->render();
 
-	float x = 2.0f; //declaring values for camera start poistion 
-	float y = 1.0f;
-
-	vec3 cameraPos = vec3(10.0f * cos(angle), x, y * sin(angle));
-	view = glm::lookAt(cameraPos, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f,
-		0.0f));
+	
 
 	prog3.use();
 	model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
@@ -361,7 +370,7 @@ void SceneBasic_Uniform::render()
 
 
 
-
+	glFinish();
 
 
 }
