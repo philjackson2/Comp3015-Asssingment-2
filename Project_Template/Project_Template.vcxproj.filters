@@ -86,6 +86,12 @@
     <None Include="shader\basic_uniform_skybox.vert">
       <Filter>shaders</Filter>
     </None>
+    <None Include="shader\basic_uniform _animation.frag" />
+    <None Include="shader\basic_uniform_animation.vert" />
+    <None Include="shader\basic_uniform_particle.frag" />
+    <None Include="shader\basic_uniform_particle.vert" />
+    <None Include="shader\flat_vert.glsl" />
+    <None Include="shader\flat_frag.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="helper\scene.h">
@@ -134,6 +140,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="helper\skybox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\particleutils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\random.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

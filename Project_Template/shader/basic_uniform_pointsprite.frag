@@ -1,4 +1,4 @@
-#version 430
+#version 460
 
 // Texture coords from geometry shader
 in vec2 TexCoord;

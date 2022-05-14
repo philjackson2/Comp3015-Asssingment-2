@@ -1,4 +1,4 @@
-#version 430
+#version 460
 
 // Define recieved primitives (points)
 layout(points) in;

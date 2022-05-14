@@ -1,4 +1,4 @@
-#version 430
+#version 460
 
 //in variables, this are in model coordinates
 layout (location = 0) in vec3 VertexPosition; 

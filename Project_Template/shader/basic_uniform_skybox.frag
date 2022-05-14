@@ -1,4 +1,4 @@
-#version 430
+#version 460
 
 //in variable that receives the diffuse calculation from the vertex shader
 in vec3 Colour;
