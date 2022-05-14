@@ -54,6 +54,40 @@ void SceneBasic_Uniform::initScene()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+
+
+	GLuint texID =
+		Texture::loadTexture("media/texture/brick1.jpg");
+	GLuint texID3 =
+		Texture::loadTexture("media/texture/cement.jpg");
+	GLuint texID2 =
+		Texture::loadTexture("media/texture/moss.png");
+	GLuint texID4 =
+		Texture::loadTexture("media/texture/ogre_diffuse.png");
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texID);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texID2);
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, texID3);
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, texID4);
+
+	glActiveTexture(GL_TEXTURE5);
+	Texture::loadTexture("media/texture/bluewater.png");
+
+
+
+	//projection = mat4(1.0f);
+	angle = glm::radians(90.0f); //set the initial angle
+	//extract the cube texture
+	GLuint cubeTex =
+		Texture::loadHdrCubeMap("media/texture/cube/pisa-hdr/pisa");
+	//activate and bindtexture
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeTex);
+
+
 #pragma region PointSprite
 	
 	//prog2.use();
@@ -95,12 +129,13 @@ void SceneBasic_Uniform::initScene()
 
     glBindVertexArray(0);
 
-   /* const char* texName = "media/texture/flower.png";
-    Texture::loadTexture(texName);*/
+	glActiveTexture(GL_TEXTURE6);
+    const char* texName = "media/texture/flower.png";
+    Texture::loadTexture(texName);
 
 
 	prog2.use();
-    prog2.setUniform("SpriteTex", 0);
+    prog2.setUniform("SpriteTex", 6);
     prog2.setUniform("Size2", 0.1f); // change the size of the point sprites
 	
 
@@ -161,47 +196,6 @@ void SceneBasic_Uniform::initScene()
 
 
 
-#pragma region textures
-
-
-
-	/// <summary>
-	///  the below code loads both textures into the scene and combines them into one so they are textured differently
-	/// </summary>
-	GLuint texID =
-		Texture::loadTexture("media/texture/brick1.jpg");
-	GLuint texID3 =
-		Texture::loadTexture("media/texture/cement.jpg");
-	GLuint texID2 =
-		Texture::loadTexture("media/texture/moss.png");
-	GLuint texID4 =
-		Texture::loadTexture("media/texture/ogre_diffuse.png");
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texID);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, texID2);
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, texID3);
-	glActiveTexture(GL_TEXTURE3);
-	glBindTexture(GL_TEXTURE_2D, texID4);
-
-
-
-
-
-
-
-	//projection = mat4(1.0f);
-	angle = glm::radians(90.0f); //set the initial angle
-	//extract the cube texture
-	GLuint cubeTex =
-		Texture::loadHdrCubeMap("media/texture/cube/pisa-hdr/pisa");
-	//activate and bindtexture
-	glActiveTexture(GL_TEXTURE4);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeTex);
-
-
-#pragma endregion
 
 
 
@@ -357,7 +351,7 @@ void SceneBasic_Uniform::render()
 	model = mat4(1.0f);
 	//model = glm::scale(model, vec3(10.0));
 	setMatrices(prog2);
-	prog2.setUniform("Tex1", 3);
+	prog2.setUniform("SpriteTex", 6);
 	glBindVertexArray(Sprites);
 	glDrawArrays(GL_POINTS, 0, numSprites);
 
@@ -464,9 +458,9 @@ void SceneBasic_Uniform::render()
 
 	glDepthMask(GL_FALSE);
 	prog5.use();
-	prog5.setUniform("ParticleTex", 0);
+	prog5.setUniform("ParticleTex", 5);
 	prog5.setUniform("ParticleLifetime", particleLifetime);
-	prog5.setUniform("ParticleSize", 3.05f);
+	prog5.setUniform("ParticleSize", 0.05f);
 	prog5.setUniform("Gravity", vec3(0.0f, -0.2f, 0.0f));
 	prog5.setUniform("EmitterPos", emitterPos);
 	setMatrices(prog5);
