@@ -84,16 +84,11 @@ void SceneBasic_Uniform::initScene()
 
     glBindVertexArray(0);
 
-
-	GLuint texID5 =
-		Texture::loadTexture("media/texture/flower.png");
-	glActiveTexture(GL_TEXTURE3);
-	glBindTexture(GL_TEXTURE_2D, texID5);
    /* const char* texName = "media/texture/flower.png";
     Texture::loadTexture(texName);*/
 
     prog2.setUniform("SpriteTex", 0);
-    prog2.setUniform("Size2", 0.1f);
+    prog2.setUniform("Size2", 0.1f); // change the size of the point sprites
 	prog.use();
 
 
@@ -290,14 +285,10 @@ void SceneBasic_Uniform::render()
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	prog2.use();
+	
 
 	float x = 2.0f; //declaring values for camera start poistion 
 	float y = 1.0f;
-
-	/*vec3 cameraPos(1.0f, 0.0f, 1.0f);
-	view = glm::lookAt(cameraPos,
-		vec3(0.0f, 0.0f, 0.0f),
-		vec3(0.0f, 1.0f, 0.0f));*/
 
 
 	vec3 cameraPos = vec3(10.0f * cos(angle), x, y * sin(angle));
@@ -308,7 +299,7 @@ void SceneBasic_Uniform::render()
 	model = mat4(1.0f);
 	//model = glm::scale(model, vec3(10.0));
 	setMatrices();
-
+	prog2.setUniform("Tex1", 3);
 	glBindVertexArray(Sprites);
 	glDrawArrays(GL_POINTS, 0, numSprites);
 
