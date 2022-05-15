@@ -21,7 +21,7 @@ using glm::mat4;
 
 
 
-
+int nFlowers = 2; //creating float for making more flowers
 
 glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -98,7 +98,7 @@ void SceneBasic_Uniform::initScene()
     glEnable(GL_DEPTH_TEST);
 	
 
-    numSprites = 600;
+    numSprites = nFlowers;
     locations = new float[numSprites *3];
     srand((unsigned int)time(0));
 
@@ -264,42 +264,73 @@ void SceneBasic_Uniform::update(float t)
 			angle -= glm::two_pi<float>();
 	}
 
-	if (GetKeyState('P') & 0x8000) { //change textures on a button press
-	  /*  GLuint texID =
-			Texture::loadTexture("media/texture/spencer.jpg");
-		GLuint texID2 =
-			Texture::loadTexture("media/texture/moss.png");
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texID);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, texID2);*/
+	if (GetKeyState('P') & 0x8000) 
+	{ 
+		
+
+		nFlowers = nFlowers+1;
+
+
+
+		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+
+		glEnable(GL_DEPTH_TEST);
+
+
+		numSprites = nFlowers;
+		locations = new float[numSprites * 3];
+		srand((unsigned int)time(0));
+
+		for (int i = 0; i < numSprites; i++)
+		{
+			vec3 p(((float)rand() / RAND_MAX * 2.0f) - 1.0f,
+				((float)rand() / RAND_MAX * 2.0f) - 1.0f,
+				((float)rand() / RAND_MAX * 2.0f) - 1.0f);
+
+			locations[i * 3] = p.x;
+			locations[i * 3 + 1] = p.y;
+			locations[i * 3 + 2] = p.z;
+		}
+
+		GLuint handle;
+		glGenBuffers(1, &handle);
+
+		glBindBuffer(GL_ARRAY_BUFFER, handle);
+		glBufferData(GL_ARRAY_BUFFER, numSprites * 8 * sizeof(float), locations, GL_STATIC_DRAW);
+
+		delete[] locations;
+
+		glGenVertexArrays(1, &Sprites);
+		glBindVertexArray(Sprites);
+
+		glBindBuffer(GL_ARRAY_BUFFER, handle);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, ((GLubyte*)NULL + (0)));
+		glEnableVertexAttribArray(0);
+
+		glBindVertexArray(0);
+
+		glActiveTexture(GL_TEXTURE6);
+		const char* texName = "media/texture/flower.png";
+		Texture::loadTexture(texName);
+
+
+		prog2.use();
+
+		prog2.setUniform("Size2", 0.1f); // change the size of the point sprites
+
+
+
+
+
 	}
 
 	if (GetKeyState('L') & 0x8000) { //change textures on a button press
-	   /* GLuint texID =
-			Texture::loadTexture("media/texture/cement.jpg");
-		GLuint texID2 =
-			Texture::loadTexture("media/texture/bluewater.png");
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texID);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, texID2);*/
+	 
 
 	}
 
 	if (GetKeyState('M') & 0x8000) { //change textures on a button press
-	  /*  GLuint texID =
-			Texture::loadTexture("media/texture/brick1.jpg");
-		GLuint texID3 =
-			Texture::loadTexture("media/texture/cement.jpg");
-		GLuint texID2 =
-			Texture::loadTexture("media/texture/moss.png");
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texID);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, texID2);
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, texID3);*/
+	 
 	}
 
 
