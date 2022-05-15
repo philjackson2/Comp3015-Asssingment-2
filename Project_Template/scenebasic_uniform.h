@@ -12,6 +12,7 @@
 #include "helper/objmesh.h"
 #include "helper/random.h"
 #include "helper/particleutils.h"
+#include <GLFW/glfw3.h>
 
 class SceneBasic_Uniform : public Scene
 {
@@ -56,8 +57,9 @@ private:
 	Plane plane;
 	std::unique_ptr<ObjMesh> pig; //pig mesh
 	std::unique_ptr<ObjMesh> cube; //for the cube
-	std::unique_ptr<ObjMesh> wall;//wall
+	std::unique_ptr<ObjMesh> wateringCan;//wateringcan
 	std::unique_ptr<ObjMesh> ogre;
+
 	void setMatrices(GLSLProgram&);
 
 	void compile();
@@ -72,6 +74,7 @@ public:
 	void render2();
 	void initBuffers();
 	float randFloat();
+	
 };
 
 #endif // SCENEBASIC_UNIFORM_H

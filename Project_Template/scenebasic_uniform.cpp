@@ -20,18 +20,21 @@ using glm::mat4;
 
 
 
+
+
+
 glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f); //defining controls for camera
 
-SceneBasic_Uniform::SceneBasic_Uniform() : plane(10.0f, 10.0f, 1000, 1000), angle(0.0f), tPrev(0.0f), rotSpeed(glm::pi<float>() / 8.0f), Time(0), particleLifetime(10.5f), nParticles(500), emitterPos(0, 0, 0), emitterDir(0, 1, 0)
+SceneBasic_Uniform::SceneBasic_Uniform() : plane(10.0f, 10.0f, 1000, 1000), angle(0.0f), tPrev(0.0f), rotSpeed(glm::pi<float>() / 8.0f), Time(0), particleLifetime(100), nParticles(5000), emitterPos(-0.30, 2., -0.30), emitterDir(2, -2.3, 2)
 {
 
 	cube = ObjMesh::load("media/cube.obj",
 		true);
 	pig = ObjMesh::load("media/pig_triangulated.obj",
 		true);
-	wall = ObjMesh::load("media/wall.obj",
+	wateringCan = ObjMesh::load("media/wateringcan.obj",
 		true);
 	ogre = ObjMesh::load("media/bs_ears.obj",
 		true);
@@ -43,9 +46,9 @@ SceneBasic_Uniform::SceneBasic_Uniform() : plane(10.0f, 10.0f, 1000, 1000), angl
 
 
 
-
 void SceneBasic_Uniform::initScene()
 {
+
 
 	compile();
 
@@ -57,7 +60,7 @@ void SceneBasic_Uniform::initScene()
 
 
 	GLuint texID =
-		Texture::loadTexture("media/texture/brick1.jpg");
+		Texture::loadTexture("media/texture/metal.jpg");
 	GLuint texID3 =
 		Texture::loadTexture("media/texture/cement.jpg");
 	GLuint texID2 =
@@ -95,8 +98,8 @@ void SceneBasic_Uniform::initScene()
     glEnable(GL_DEPTH_TEST);
 	
 
-    numSprites = 50;
-    locations = new float[numSprites * 3];
+    numSprites = 600;
+    locations = new float[numSprites *3];
     srand((unsigned int)time(0));
 
     for (int i = 0; i < numSprites; i++)
@@ -114,7 +117,7 @@ void SceneBasic_Uniform::initScene()
     glGenBuffers(1, &handle);
 
     glBindBuffer(GL_ARRAY_BUFFER, handle);
-    glBufferData(GL_ARRAY_BUFFER, numSprites * 3 * sizeof(float), locations, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, numSprites * 8 * sizeof(float), locations, GL_STATIC_DRAW);
 
     delete[] locations;
 
@@ -133,23 +136,14 @@ void SceneBasic_Uniform::initScene()
 
 
 	prog2.use();
-    prog2.setUniform("SpriteTex", 6);
+  
     prog2.setUniform("Size2", 0.1f); // change the size of the point sprites
 	
 
-
-
 #pragma endregion
 
 
-#pragma region Surface Animation
-	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-	glEnable(GL_DEPTH_TEST);
 
-	prog4.setUniform("Ligtht.Intensity", vec3(1.0f, 1.0f, 1.0f));
-	angle = glm::half_pi<float>();
-
-#pragma endregion
 
 
 
@@ -194,8 +188,6 @@ void SceneBasic_Uniform::initScene()
 
 
 
-
-
 	
 }
 
@@ -223,9 +215,7 @@ void SceneBasic_Uniform::compile()
 		prog3.link();
 
 
-		prog4.compileShader("shader/basic_uniform_animation.vert");
-		prog4.compileShader("shader/basic_uniform _animation.frag");
-		prog4.link();
+		
 		
 
 		prog5.compileShader("shader/basic_uniform_particle.vert");
@@ -328,13 +318,11 @@ void SceneBasic_Uniform::update(float t)
 
 void SceneBasic_Uniform::render()
 {
-#pragma region Point Sprite
 
 
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	prog2.use();
-	
+
+
 
 	float x = 2.0f; //declaring values for camera start poistion 
 	float y = 1.0f;
@@ -343,7 +331,18 @@ void SceneBasic_Uniform::render()
 	vec3 cameraPos = vec3(10.0f * cos(angle), x, y * sin(angle));
 	view = glm::lookAt(cameraPos, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f,
 		0.0f));
+
+#pragma region Point Sprite
+
+
+	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	prog2.use();
+	
+
 	//point sprite
+
+
 
 	model = mat4(1.0f);
 	//model = glm::scale(model, vec3(10.0));
@@ -355,33 +354,6 @@ void SceneBasic_Uniform::render()
 	
 
 #pragma endregion
-
-
-#pragma region Animation
-	prog4.setUniform("AnimationTime", AnimationTime);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	view = glm::lookAt(vec3(10.0f * cos(angle), 4.0f, 10.0f * sin(angle)),
-		vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
-
-	projection = glm::perspective(glm::radians(60.0f), (float)width / height, 0.3f, 100.0f);
-
-	prog4.setUniform("Material.Kd", 0.2f, 0.5f, 0.9f);
-	prog4.setUniform("Material.Ks", 0.8f, 0.8f, 0.8f);
-	prog4.setUniform("Material.Ka", 0.2, 0.5f, 0.9f);
-	prog4.setUniform("Material.Shininess", 100.0f);
-	model = mat4(1.0f);
-	model = glm::rotate(model, glm::radians(-10.0f), vec3(0.0f, 0.0f, 1.0f));
-	model = glm::rotate(model, glm::radians(50.0f), vec3(0.0f, 0.0f, 1.0f));
-	setMatrices(prog4);
-	plane.render();
-
-#pragma endregion
-
-
-
-
-
 
 
 	prog.use();
@@ -399,19 +371,22 @@ void SceneBasic_Uniform::render()
 	model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
 	model = glm::translate(model, vec3(3.0f, 5, 0));
 	setMatrices(prog);
+
+
 	pig->render();
-
-
 	model = mat4(1.0f);
 	model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
 	model = glm::translate(model, vec3(3.0f, 0, 0)); //moving the cube out of the way for the pig to not be inside it 
+
 	setMatrices(prog);
 	cube->render();//cube is differently name in the .h file so they are not overwiring eachother
+
+
 	model = mat4(1.0f);
-	model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
-	model = glm::translate(model, vec3(-3.0f, 0, 0)); //moving the wall
+	model = glm::rotate(model, glm::radians(90.0f), vec3(5.0f, 1.0f, 0.0f));
+	model = glm::translate(model, vec3(0.0f, -1.4, -3.5)); 
 	setMatrices(prog);
-	wall->render();//wall is differently name in the .h file so they are not overwiring eachother
+	wateringCan->render();//wall is differently name in the .h file so they are not overwiring eachother
 
 
 
@@ -450,7 +425,7 @@ void SceneBasic_Uniform::render()
 	
 	model = mat4(1.0f);
 	flatprog.use();
-	flatprog.setUniform("Colour", glm::vec4(0.4f, 0.4f, 0.4f, 1.0f));
+	flatprog.setUniform("Colour", glm::vec4(1.4f, 0.4f, 0.4f, 3.0f));
 
 
 	glDepthMask(GL_FALSE);

@@ -47,6 +47,7 @@ public:
             glfwTerminate();
             exit( EXIT_FAILURE );
         }
+       
         glfwMakeContextCurrent(window);
 
         // Get framebuffer size
@@ -71,6 +72,7 @@ public:
 
     int run(Scene & scene) {
         scene.setDimensions(fbw, fbh);
+        
         scene.initScene();
         scene.resize(fbw, fbh);
 

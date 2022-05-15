@@ -12,3 +12,4 @@ void main()
     FragColor = texture(ParticleTex, TexCoord);
     FragColor.a *= Transp;
 }
+//transparancy 

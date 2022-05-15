@@ -1,5 +1,9 @@
 #pragma once
 
+//#include<GLFW/glfw3.h>
+
+
+
 #include <glm/glm.hpp>
 
 class Scene
@@ -10,6 +14,7 @@ protected:
 public:
     int width;
     int height;
+
 
 	Scene() : m_animate(true), width(800), height(600) { }
 	virtual ~Scene() {}

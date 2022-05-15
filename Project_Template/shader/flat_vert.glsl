@@ -1,7 +1,7 @@
 #version 460
 
 layout (location = 0) in vec3 VertexPosition;
-//in vec3 VertexPosition;
+
 
 uniform mat4 MV;
 uniform mat4 ProjectionMatrix;
