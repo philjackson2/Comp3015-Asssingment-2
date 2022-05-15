@@ -90,56 +90,56 @@ void SceneBasic_Uniform::initScene()
 	glActiveTexture(GL_TEXTURE4);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeTex);
 
-
+	
 #pragma region PointSprite
+
+		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+
+		glEnable(GL_DEPTH_TEST);
+
+
+		numSprites = nFlowers;
+		locations = new float[numSprites * 3];
+		srand((unsigned int)time(0));
+
+		for (int i = 0; i < numSprites; i++)
+		{
+			vec3 p(((float)rand() / RAND_MAX * 2.0f) - 1.0f,
+				((float)rand() / RAND_MAX * 2.0f) - 1.0f,
+				((float)rand() / RAND_MAX * 2.0f) - 1.0f);
+
+			locations[i * 3] = p.x;
+			locations[i * 3 + 1] = p.y;
+			locations[i * 3 + 2] = p.z;
+		}
+
+		GLuint handle;
+		glGenBuffers(1, &handle);
+
+		glBindBuffer(GL_ARRAY_BUFFER, handle);
+		glBufferData(GL_ARRAY_BUFFER, numSprites * 8 * sizeof(float), locations, GL_STATIC_DRAW);
+
+		delete[] locations;
+
+		glGenVertexArrays(1, &Sprites);
+		glBindVertexArray(Sprites);
+
+		glBindBuffer(GL_ARRAY_BUFFER, handle);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, ((GLubyte*)NULL + (0)));
+		glEnableVertexAttribArray(0);
+
+		glBindVertexArray(0);
+
+		glActiveTexture(GL_TEXTURE6);
+		const char* texName = "media/texture/flower.png";
+		Texture::loadTexture(texName);
+
+
+		prog2.use();
+
+		prog2.setUniform("Size2", 0.1f); // change the size of the point sprites
+
 	
-    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-
-    glEnable(GL_DEPTH_TEST);
-	
-
-    numSprites = nFlowers;
-    locations = new float[numSprites *3];
-    srand((unsigned int)time(0));
-
-    for (int i = 0; i < numSprites; i++)
-    {
-        vec3 p(((float)rand() / RAND_MAX * 2.0f) - 1.0f,
-            ((float)rand() / RAND_MAX * 2.0f) - 1.0f,
-            ((float)rand() / RAND_MAX * 2.0f) - 1.0f);
-
-        locations[i * 3] = p.x;
-        locations[i * 3 + 1] = p.y;
-        locations[i * 3 + 2] = p.z;
-    }
-
-    GLuint handle;
-    glGenBuffers(1, &handle);
-
-    glBindBuffer(GL_ARRAY_BUFFER, handle);
-    glBufferData(GL_ARRAY_BUFFER, numSprites * 8 * sizeof(float), locations, GL_STATIC_DRAW);
-
-    delete[] locations;
-
-    glGenVertexArrays(1, &Sprites);
-    glBindVertexArray(Sprites);
-
-    glBindBuffer(GL_ARRAY_BUFFER, handle);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, ((GLubyte*)NULL + (0)));
-    glEnableVertexAttribArray(0);
-
-    glBindVertexArray(0);
-
-	glActiveTexture(GL_TEXTURE6);
-    const char* texName = "media/texture/flower.png";
-    Texture::loadTexture(texName);
-
-
-	prog2.use();
-  
-    prog2.setUniform("Size2", 0.1f); // change the size of the point sprites
-	
-
 #pragma endregion
 
 
@@ -264,7 +264,7 @@ void SceneBasic_Uniform::update(float t)
 			angle -= glm::two_pi<float>();
 	}
 
-	if (GetKeyState('P') & 0x8000) 
+	if (GetKeyState('P')) 
 	{ 
 		
 
@@ -324,21 +324,7 @@ void SceneBasic_Uniform::update(float t)
 
 	}
 
-	if (GetKeyState('L') & 0x8000) { //change textures on a button press
-	 
-
-	}
-
-	if (GetKeyState('M') & 0x8000) { //change textures on a button press
-	 
-	}
-
-
-	if (GetKeyState('E') & 0x8000) {
-		
-		
-
-	}
+	
 
 
 	Time = t;
@@ -452,28 +438,28 @@ void SceneBasic_Uniform::render()
 
 
 #pragma region Particle
+	if (GetKeyState('P') & 0x8000) {
 
-	
-	model = mat4(1.0f);
-	flatprog.use();
-	flatprog.setUniform("Colour", glm::vec4(1.4f, 0.4f, 0.4f, 3.0f));
+		model = mat4(1.0f);
+		flatprog.use();
+		flatprog.setUniform("Colour", glm::vec4(1.4f, 0.4f, 0.4f, 3.0f));
 
 
-	glDepthMask(GL_FALSE);
-	prog5.use();
-	prog5.setUniform("ParticleTex", 5);
-	prog5.setUniform("ParticleLifetime", particleLifetime);
-	prog5.setUniform("ParticleSize", 0.05f);
-	prog5.setUniform("Gravity", vec3(0.0f, -0.2f, 0.0f));
-	prog5.setUniform("EmitterPos", emitterPos);
-	setMatrices(prog5);
+		glDepthMask(GL_FALSE);
+		prog5.use();
+		prog5.setUniform("ParticleTex", 5);
+		prog5.setUniform("ParticleLifetime", particleLifetime);
+		prog5.setUniform("ParticleSize", 0.05f);
+		prog5.setUniform("Gravity", vec3(0.0f, -0.2f, 0.0f));
+		prog5.setUniform("EmitterPos", emitterPos);
+		setMatrices(prog5);
 
-	prog5.setUniform("Time", Time);
-	glBindVertexArray(particles);
-	glDrawArraysInstanced(GL_TRIANGLES, 0, 6, nParticles);
-	glBindVertexArray(0);
-	glDepthMask(GL_TRUE);
-
+		prog5.setUniform("Time", Time);
+		glBindVertexArray(particles);
+		glDrawArraysInstanced(GL_TRIANGLES, 0, 6, nParticles);
+		glBindVertexArray(0);
+		glDepthMask(GL_TRUE);
+	}
 #pragma endregion
 
 	glFinish();
