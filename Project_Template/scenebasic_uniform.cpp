@@ -90,8 +90,6 @@ void SceneBasic_Uniform::initScene()
 
 #pragma region PointSprite
 	
-	//prog2.use();
-
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
     glEnable(GL_DEPTH_TEST);
@@ -145,11 +143,11 @@ void SceneBasic_Uniform::initScene()
 
 
 #pragma region Surface Animation
-	/*glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 
 	prog4.setUniform("Ligtht.Intensity", vec3(1.0f, 1.0f, 1.0f));
-	angle = glm::half_pi<float>();*/
+	angle = glm::half_pi<float>();
 
 #pragma endregion
 
@@ -160,7 +158,6 @@ void SceneBasic_Uniform::initScene()
 #pragma region Lights
 
 	prog.use();
-
 
 	view = glm::lookAt(vec3(0.5f, 0.75f, 0.75f), vec3(0.0f, 0.0f, 0.0f),
 		vec3(0.0f, 1.0f, 0.0f));
@@ -226,10 +223,10 @@ void SceneBasic_Uniform::compile()
 		prog3.link();
 
 
-		/*prog4.compileShader("shader/basic_uniform_animation.vert");
-		prog4.compileShader("shader/basic_uniform_animation.frag");
+		prog4.compileShader("shader/basic_uniform_animation.vert");
+		prog4.compileShader("shader/basic_uniform _animation.frag");
 		prog4.link();
-		prog4.use();*/
+		
 
 		prog5.compileShader("shader/basic_uniform_particle.vert");
 		prog5.compileShader("shader/basic_uniform_particle.frag");
@@ -361,7 +358,7 @@ void SceneBasic_Uniform::render()
 
 
 #pragma region Animation
-	/*prog4.setUniform("AnimationTime", AnimationTime);
+	prog4.setUniform("AnimationTime", AnimationTime);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	view = glm::lookAt(vec3(10.0f * cos(angle), 4.0f, 10.0f * sin(angle)),
@@ -376,8 +373,8 @@ void SceneBasic_Uniform::render()
 	model = mat4(1.0f);
 	model = glm::rotate(model, glm::radians(-10.0f), vec3(0.0f, 0.0f, 1.0f));
 	model = glm::rotate(model, glm::radians(50.0f), vec3(0.0f, 0.0f, 1.0f));
-	setMatrices();
-	plane.render();*/
+	setMatrices(prog4);
+	plane.render();
 
 #pragma endregion
 
@@ -497,9 +494,7 @@ void SceneBasic_Uniform::setMatrices(GLSLProgram& p)
 
 	p.setUniform("MV", mv);
 
-	//prog4.setUniform("ModelViewMatrix", mv);
-	//prog4.setUniform("NormalMatrix", glm::mat3(vec3(mv[0]), vec3(mv[1]), vec3(mv[2])));
-	//prog4.setUniform("MVP", projection * mv);
+	
 }
 
 void SceneBasic_Uniform::resize(int w, int h)

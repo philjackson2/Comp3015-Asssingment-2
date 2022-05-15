@@ -1,7 +1,7 @@
 #version 460
 
 //in variable that receives the diffuse calculation from the vertex shader
-in vec3 Colour;
+
 in vec2 TexCoord;
 in vec3 Position;
 in vec3 Normal;
@@ -52,7 +52,7 @@ vec3 spec = vec3 (0.0);
 
 if (sdotn > 0.0)
 {
-vec3 v = normalize (-position.xyz);
+vec3 v = normalize (-position);
 
 vec3 h = normalize (v + s);
 
