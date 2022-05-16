@@ -12,6 +12,9 @@ uniform float Size2;
 
 uniform mat4 ProjectionMatrix;
 
+
+
+
 out vec2 TexCoord;
 
 void main()

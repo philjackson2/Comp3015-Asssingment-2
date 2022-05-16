@@ -21,7 +21,9 @@ using glm::mat4;
 
 
 
-int nFlowers = 2; //creating float for making more flowers
+
+
+float flowerSize = 0.1f;
 
 glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -30,7 +32,7 @@ glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f); //defining controls for camera
 SceneBasic_Uniform::SceneBasic_Uniform() : plane(10.0f, 10.0f, 1000, 1000), angle(0.0f), tPrev(0.0f), rotSpeed(glm::pi<float>() / 8.0f), Time(0), particleLifetime(100), nParticles(5000), emitterPos(-0.30, 2., -0.30), emitterDir(2, -2.3, 2)
 {
 
-	cube = ObjMesh::load("media/cube.obj",
+	cube = ObjMesh::load("media/flower pot.obj",
 		true);
 	pig = ObjMesh::load("media/pig_triangulated.obj",
 		true);
@@ -41,9 +43,6 @@ SceneBasic_Uniform::SceneBasic_Uniform() : plane(10.0f, 10.0f, 1000, 1000), angl
 
 
 }
-
-
-
 
 
 void SceneBasic_Uniform::initScene()
@@ -81,7 +80,7 @@ void SceneBasic_Uniform::initScene()
 
 
 
-	//projection = mat4(1.0f);
+	
 	angle = glm::radians(90.0f); //set the initial angle
 	//extract the cube texture
 	GLuint cubeTex =
@@ -98,7 +97,7 @@ void SceneBasic_Uniform::initScene()
 		glEnable(GL_DEPTH_TEST);
 
 
-		numSprites = nFlowers;
+		numSprites = 30;
 		locations = new float[numSprites * 3];
 		srand((unsigned int)time(0));
 
@@ -137,7 +136,7 @@ void SceneBasic_Uniform::initScene()
 
 		prog2.use();
 
-		prog2.setUniform("Size2", 0.1f); // change the size of the point sprites
+		prog2.setUniform("Size2", flowerSize); // change the size of the point sprites
 
 	
 #pragma endregion
@@ -268,55 +267,11 @@ void SceneBasic_Uniform::update(float t)
 	{ 
 		
 
-		nFlowers = nFlowers+1;
-
-
-
-		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-
-		glEnable(GL_DEPTH_TEST);
-
-
-		numSprites = nFlowers;
-		locations = new float[numSprites * 3];
-		srand((unsigned int)time(0));
-
-		for (int i = 0; i < numSprites; i++)
-		{
-			vec3 p(((float)rand() / RAND_MAX * 2.0f) - 1.0f,
-				((float)rand() / RAND_MAX * 2.0f) - 1.0f,
-				((float)rand() / RAND_MAX * 2.0f) - 1.0f);
-
-			locations[i * 3] = p.x;
-			locations[i * 3 + 1] = p.y;
-			locations[i * 3 + 2] = p.z;
-		}
-
-		GLuint handle;
-		glGenBuffers(1, &handle);
-
-		glBindBuffer(GL_ARRAY_BUFFER, handle);
-		glBufferData(GL_ARRAY_BUFFER, numSprites * 8 * sizeof(float), locations, GL_STATIC_DRAW);
-
-		delete[] locations;
-
-		glGenVertexArrays(1, &Sprites);
-		glBindVertexArray(Sprites);
-
-		glBindBuffer(GL_ARRAY_BUFFER, handle);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, ((GLubyte*)NULL + (0)));
-		glEnableVertexAttribArray(0);
-
-		glBindVertexArray(0);
-
-		glActiveTexture(GL_TEXTURE6);
-		const char* texName = "media/texture/flower.png";
-		Texture::loadTexture(texName);
-
+		
+		flowerSize = flowerSize + 0.0001f;
 
 		prog2.use();
-
-		prog2.setUniform("Size2", 0.1f); // change the size of the point sprites
+		prog2.setUniform("Size2", flowerSize);
 
 
 
