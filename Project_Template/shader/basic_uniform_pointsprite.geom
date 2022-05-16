@@ -3,8 +3,7 @@
 // Define recieved primitives (points)
 layout(points) in;
 
-// We want to output triangle stip primitive types
-// Strip has max vertices 4, 2 triangles to made up a quad
+// Strip has max vertices 4, 2 triangles to made up a square for the point sprites
 layout(triangle_strip, max_vertices = 4) out;
 
 // Half width of quad

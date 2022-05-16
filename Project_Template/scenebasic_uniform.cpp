@@ -17,13 +17,7 @@ using glm::mat4;
 #include "helper/glutils.h"
 
 
-
-
-
-
-
-
-float flowerSize = 0.1f;
+float flowerSize = 0.1f; // float to enable the changing of the size of the flower.
 
 glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -32,14 +26,12 @@ glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f); //defining controls for camera
 SceneBasic_Uniform::SceneBasic_Uniform() : plane(10.0f, 10.0f, 1000, 1000), angle(0.0f), tPrev(0.0f), rotSpeed(glm::pi<float>() / 8.0f), Time(0), particleLifetime(100), nParticles(5000), emitterPos(-0.30, 2., -0.30), emitterDir(2, -2.3, 2)
 {
 
-	cube = ObjMesh::load("media/flower pot.obj",
+	flowerPot = ObjMesh::load("media/flower pot.obj",
 		true);
-	pig = ObjMesh::load("media/pig_triangulated.obj",
-		true);
+
 	wateringCan = ObjMesh::load("media/wateringcan.obj",
 		true);
-	ogre = ObjMesh::load("media/bs_ears.obj",
-		true);
+	
 
 
 }
@@ -48,17 +40,12 @@ SceneBasic_Uniform::SceneBasic_Uniform() : plane(10.0f, 10.0f, 1000, 1000), angl
 void SceneBasic_Uniform::initScene()
 {
 
-
 	compile();
 
 	initBuffers();
-
-	glEnable(GL_BLEND);
+		glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-
-
-	GLuint texID =
+		GLuint texID =
 		Texture::loadTexture("media/texture/metal.jpg");
 	GLuint texID3 =
 		Texture::loadTexture("media/texture/cement.jpg");
@@ -77,10 +64,7 @@ void SceneBasic_Uniform::initScene()
 
 	glActiveTexture(GL_TEXTURE5);
 	Texture::loadTexture("media/texture/bluewater.png");
-
-
-
-	
+			
 	angle = glm::radians(90.0f); //set the initial angle
 	//extract the cube texture
 	GLuint cubeTex =
@@ -143,18 +127,13 @@ void SceneBasic_Uniform::initScene()
 
 
 
-
-
-
-
-
 #pragma region Lights
 
 	prog.use();
 
 	view = glm::lookAt(vec3(0.5f, 0.75f, 0.75f), vec3(0.0f, 0.0f, 0.0f),
 		vec3(0.0f, 1.0f, 0.0f));
-	//projection = mat4(1.0f);
+	
 	float x, z;
 	for (int i = 0; i < 3; i++)
 	{
@@ -170,9 +149,7 @@ void SceneBasic_Uniform::initScene()
 	glEnable(GL_DEPTH_TEST);
 	view = glm::lookAt(vec3(1.0f, 1.25f, 1.25f), vec3(0.0f, 0.0f, 0.0f),
 		vec3(0.0f, 1.0f, 0.0f));
-	//projection = mat4(1.0f);
-
-
+	
 	prog.setUniform("Lights[0].L", vec3(0.0f, 0.0f, 0.8f));
 	prog.setUniform("Lights[1].L", vec3(0.0f, 0.8f, 0.0f));
 	prog.setUniform("Lights[2].L", vec3(0.8f, 0.0f, 0.0f));
@@ -183,23 +160,19 @@ void SceneBasic_Uniform::initScene()
 	prog.setUniform("light.la", vec3(0.6, 0.4, 0.3));
 
 #pragma endregion
-
-
-
-
-	
+			
 }
 
 void SceneBasic_Uniform::compile()
 {
 	try {
 
-
+		//prog is used to load in the different shaders, there are different progs for each shader of every and they are called upon as they are needed
 
 		
 		prog.compileShader("shader/basic_uniform.vert");
 		prog.compileShader("shader/basic_uniform.frag");//here the two shaders are loadead in with the compile 
-		//prog.compileShader("shader/basic_uniform.geom");
+
 		prog.link();
 		prog.use();
 
@@ -212,10 +185,7 @@ void SceneBasic_Uniform::compile()
 		prog3.compileShader("shader/basic_uniform_skybox.vert");
 		prog3.compileShader("shader/basic_uniform_skybox.frag");
 		prog3.link();
-
-
-		
-		
+			
 
 		prog5.compileShader("shader/basic_uniform_particle.vert");
 		prog5.compileShader("shader/basic_uniform_particle.frag");
@@ -229,12 +199,8 @@ void SceneBasic_Uniform::compile()
 		cerr << e.what() << endl;
 		exit(EXIT_FAILURE);
 	}
-
-
-
-	
+		
 }
-
 void SceneBasic_Uniform::update(float t)
 {
 	//camera controls using get key states to manipulate the camera
@@ -265,36 +231,20 @@ void SceneBasic_Uniform::update(float t)
 
 	if (GetKeyState('P')) 
 	{ 
-		
-
-		
+		//maniplate the size of the flower!
 		flowerSize = flowerSize + 0.0001f;
 
 		prog2.use();
 		prog2.setUniform("Size2", flowerSize);
 
-
-
+	}
+	Time = t;
 
 
 	}
 
-	
-
-
-	Time = t;
-
-
-
-}
-
 void SceneBasic_Uniform::render()
 {
-
-
-
-
-
 
 	float x = 2.0f; //declaring values for camera start poistion 
 	float y = 1.0f;
@@ -306,18 +256,12 @@ void SceneBasic_Uniform::render()
 
 #pragma region Point Sprite
 
-
 	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	prog2.use();
 	
-
-	//point sprite
-
-
-
 	model = mat4(1.0f);
-	//model = glm::scale(model, vec3(10.0));
+	
 	setMatrices(prog2);
 	prog2.setUniform("SpriteTex", 6);
 	glBindVertexArray(Sprites);
@@ -331,7 +275,7 @@ void SceneBasic_Uniform::render()
 	prog.use();
 
 
-	prog.setUniform("Tex1", 0); //feeding Tex 1 to set to 0 for it to grab the correct texture
+	prog.setUniform("Tex1", 0); 
 
 
 	prog.setUniform("light.position", vec3(0.0, 1.0, 0.0));
@@ -339,26 +283,20 @@ void SceneBasic_Uniform::render()
 	prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
 	prog.setUniform("Material.Ka", 0.5f, 0.5f, 0.5f);
 	prog.setUniform("Material.Shininess", 180.0f);
+	
 	model = mat4(1.0f);
 	model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
-	model = glm::translate(model, vec3(3.0f, 5, 0));
-	setMatrices(prog);
-
-
-	pig->render();
-	model = mat4(1.0f);
-	model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
-	model = glm::translate(model, vec3(3.0f, 0, 0)); //moving the cube out of the way for the pig to not be inside it 
+	model = glm::translate(model, vec3(3.0f, 0, 0)); 
 
 	setMatrices(prog);
-	cube->render();//cube is differently name in the .h file so they are not overwiring eachother
+	flowerPot->render();
 
 
 	model = mat4(1.0f);
 	model = glm::rotate(model, glm::radians(90.0f), vec3(5.0f, 1.0f, 0.0f));
 	model = glm::translate(model, vec3(0.0f, -1.4, -3.5)); 
 	setMatrices(prog);
-	wateringCan->render();//wall is differently name in the .h file so they are not overwiring eachother
+	wateringCan->render();
 
 
 
@@ -372,12 +310,7 @@ void SceneBasic_Uniform::render()
 	prog.setUniform("Tex1", 2);
 	plane.render();
 
-	model = mat4(1.0f);
-	model = glm::rotate(model, glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
-	model = glm::translate(model, vec3(1.0f, 2, 0));
-	setMatrices(prog);
-	prog.setUniform("Tex1", 3);
-	ogre->render();
+	
 
 	
 
@@ -460,18 +393,18 @@ float SceneBasic_Uniform::randFloat()
 
 void SceneBasic_Uniform::initBuffers()
 {
-	// generate the buffers for initial velocity and birth time
+	// generate the buffers
 	glGenBuffers(1, &initVel); // initial velocity buffer
 	glGenBuffers(1, &startTime); // start time buffer
 
-	// allocate space for all buffers
+	
 	int size = nParticles * sizeof(float);
 	glBindBuffer(GL_ARRAY_BUFFER, initVel);
 	glBufferData(GL_ARRAY_BUFFER, size * 3, 0, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, startTime);
 	glBufferData(GL_ARRAY_BUFFER, size, 0, GL_STATIC_DRAW);
 	
-	// fill the first velocity buffer with random velocities
+	// give random velocities to the buffer
 	glm::mat3 emitterBasis = ParticleUtils::makeArbitraryBasis(emitterDir);
 	vec3 v(0.0f);
 	float velocity, theta, phi;
@@ -479,7 +412,7 @@ void SceneBasic_Uniform::initBuffers()
 
 	for (uint32_t i = 0; i < nParticles; i++)
 	{
-		// pick the direction of the velocity
+		
 		theta = glm::mix(0.0f, glm::pi<float>() / 20.0f, randFloat());
 		phi = glm::mix(0.0f, glm::two_pi<float>(), randFloat());
 
@@ -487,7 +420,7 @@ void SceneBasic_Uniform::initBuffers()
 		v.y = cosf(theta);
 		v.z = sinf(theta) * sinf(phi);
 
-		// scale the set the magnitude of the velocity
+		
 		velocity = glm::mix(1.25f, 1.5f, randFloat());
 		v = glm::normalize(emitterBasis * v) * velocity;
 
@@ -497,27 +430,27 @@ void SceneBasic_Uniform::initBuffers()
 	}
 
 	glBindBuffer(GL_ARRAY_BUFFER, initVel);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, size * 3, data.data()); // glBufferSubData(GL_ARRAY_BUFFER, 0, size * 3, data.data());
+	glBufferSubData(GL_ARRAY_BUFFER, 0, size * 3, data.data()); 
 
-	// fill the start time buffer
+	
 	float rate = particleLifetime / nParticles;
 	for (int i = 0; i < nParticles; i++)
 	{
 		data[i] = rate * i;
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, startTime);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, nParticles * sizeof(float), data.data()); // glBufferSubData(GL_ARRAY_BUFFER, 0, nParticles * sizeof(float), data.data());
+	glBufferSubData(GL_ARRAY_BUFFER, 0, nParticles * sizeof(float), data.data()); 
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	glGenVertexArrays(1, &particles); // glGenVertexArrays(1, &particles);
+	glGenVertexArrays(1, &particles);
 	glBindVertexArray(particles);
 	glBindBuffer(GL_ARRAY_BUFFER, initVel);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0); // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0); 
 	glEnableVertexAttribArray(0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, startTime);
-	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 0, 0); // glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 0, 0); 
 	glEnableVertexAttribArray(1);
 
 	glVertexAttribDivisor(0, 1);

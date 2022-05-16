@@ -21,7 +21,7 @@ uniform mat4 ProjectionMatrix;
 const vec3 offsets[] = vec3[](vec3(-0.5,-0.5,0),vec3(0.5,-0.5,0),vec3(0.5,0.5,0),
                               vec3(-0.5,-0.5,0),vec3(0.5,0.5,0),vec3(-0.5,0.5,0));
 
-// texture coordinates for each vertex of the particles quad
+// texture coordinates for each vertex of the particles as quads
 const vec2 texCoords[] = vec2[](vec2(0,0),vec2(1,0),vec2(1,1),vec2(0,0),vec2(1,1),vec2(0,1));
 
 void main()

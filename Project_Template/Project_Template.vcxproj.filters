@@ -75,8 +75,6 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="packages.config" />
-    <None Include="shader\edge_detection.vert" />
-    <None Include="shader\edge_detection.frag" />
     <None Include="shader\basic_uniform_pointsprite.frag" />
     <None Include="shader\basic_uniform_pointsprite.geom" />
     <None Include="shader\basic_uniform_pointsprite.vert" />
@@ -86,8 +84,6 @@
     <None Include="shader\basic_uniform_skybox.vert">
       <Filter>shaders</Filter>
     </None>
-    <None Include="shader\basic_uniform _animation.frag" />
-    <None Include="shader\basic_uniform_animation.vert" />
     <None Include="shader\basic_uniform_particle.frag" />
     <None Include="shader\basic_uniform_particle.vert" />
     <None Include="shader\flat_vert.glsl" />

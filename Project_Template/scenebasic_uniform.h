@@ -55,10 +55,10 @@ private:
 
 
 	Plane plane;
-	std::unique_ptr<ObjMesh> pig; //pig mesh
-	std::unique_ptr<ObjMesh> cube; //for the cube
+
+	std::unique_ptr<ObjMesh> flowerPot; //for the cube
 	std::unique_ptr<ObjMesh> wateringCan;//wateringcan
-	std::unique_ptr<ObjMesh> ogre;
+	
 
 	void setMatrices(GLSLProgram&);
 
